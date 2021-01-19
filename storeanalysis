@@ -1,0 +1,53 @@
+#Business analysis using advance python
+#importing packages
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+#reading the given dataset
+df = pd.read_csv("SampleSuperstore.csv")
+df.head(10)
+df.shape
+#To see the total columns for analysis
+df.columns
+df.info()
+df.isna().sum()
+#there is no null objects in dataset so it is proper dataset
+#Getting some analysis idea through total mean and median and other properties of dataset
+df.describe().round()
+#For finding most preferred ship mode.
+# Setting the figure size
+plt.figure(figsize=(10, 8))
+
+# countplot: Show the counts of observations in each categorical bin using bars
+sns.countplot(x='Ship Mode', data=df)
+
+# Display the figure
+plt.show()
+
+#standard class is most preferred shipmode
+# grouping City by sales
+df_temp = df.groupby('City').sum()['Sales'].reset_index()
+df_temp.sort_values(by=['Sales'], inplace=True, ascending=False)
+df_temp
+#SO here Newyork city has highest sales...overall...
+#For finding most type of buyers...
+# Setting the figure size
+plt.figure(figsize=(10, 8))
+
+# countplot: Show the counts of observations in each categorical bin using bars
+sns.countplot(x='Segment', data=df)
+
+# Display the figure
+plt.show()
+#Obviously consumers are high
+#Which category gives most profit
+df_cat = df.groupby('Category').sum()['Profit'].reset_index()
+df_cat.sort_values(by=['Profit'], inplace=True, ascending=False)
+df_cat
+#result shows technology yielded most profit so far in given dataset
+#To find which domain in each category yield more profit.
+# Grouping products by Category and Sub-Category
+cat_subcat = pd.DataFrame(df.groupby(['Category', 'Sub-Category']).sum()['Profit'])
+
+# Sorting the values
+cat_subcat.sort_values(['Category','Profit'], ascending=False)
